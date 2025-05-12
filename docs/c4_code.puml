@@ -3,29 +3,29 @@
 
 title V8引擎代码图
 
-Component_Boundary(scanner_boundary, "扫描器") {
+Boundary(scanner_boundary, "扫描器") {
     Component(character_stream, "CharacterStream", "字符流处理")
     Component(token, "Token", "token生成")
     Component(keyword, "Keyword", "关键字识别")
-    
+
     Rel(character_stream, token, "生成")
     Rel(keyword, token, "识别")
 }
 
-Component_Boundary(ast_boundary, "AST生成") {
+Boundary(ast_boundary, "AST生成") {
     Component(expression, "Expression", "表达式节点")
     Component(statement, "Statement", "语句节点")
     Component(literal, "Literal", "字面量节点")
-    
+
     Rel(expression, statement, "组合")
     Rel(literal, expression, "包含")
 }
 
-Component_Boundary(bytecode_boundary, "字节码") {
+Boundary(bytecode_boundary, "字节码") {
     Component(bytecode_array, "BytecodeArray", "字节码存储")
     Component(interpreter_entry, "InterpreterEntry", "入口点")
     Component(handler, "Handler", "字节码处理器")
-    
+
     Rel(bytecode_array, interpreter_entry, "执行")
     Rel(interpreter_entry, handler, "分发")
 }
