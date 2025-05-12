@@ -1,0 +1,44 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title V8引擎代码图
+
+Component_Boundary(scanner_boundary, "扫描器") {
+    Component(character_stream, "CharacterStream", "字符流处理")
+    Component(token, "Token", "token生成")
+    Component(keyword, "Keyword", "关键字识别")
+    
+    Rel(character_stream, token, "生成")
+    Rel(keyword, token, "识别")
+}
+
+Component_Boundary(ast_boundary, "AST生成") {
+    Component(expression, "Expression", "表达式节点")
+    Component(statement, "Statement", "语句节点")
+    Component(literal, "Literal", "字面量节点")
+    
+    Rel(expression, statement, "组合")
+    Rel(literal, expression, "包含")
+}
+
+Component_Boundary(bytecode_boundary, "字节码") {
+    Component(bytecode_array, "BytecodeArray", "字节码存储")
+    Component(interpreter_entry, "InterpreterEntry", "入口点")
+    Component(handler, "Handler", "字节码处理器")
+    
+    Rel(bytecode_array, interpreter_entry, "执行")
+    Rel(interpreter_entry, handler, "分发")
+}
+
+Rel(token, expression, "转换为AST节点")
+Rel(statement, bytecode_array, "生成字节码")
+
+legend right
+<b>核心类</b>
+1. CharacterStream: 源代码字符流处理
+2. Token: 词法单元表示
+3. Expression/Statement: AST节点类型
+4. BytecodeArray: 字节码存储结构
+endlegend
+
+@enduml

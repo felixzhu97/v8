@@ -1,0 +1,32 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+title V8引擎容器图
+
+System_Boundary(v8_boundary, "V8引擎") {
+    Container(parser, "解析器", "将JS代码转换为AST")
+    Container(ignition, "解释器", "生成字节码并执行")
+    Container(turbofan, "优化编译器", "生成优化机器码")
+    Container(gc, "垃圾回收器", "内存管理")
+    Container(runtime, "运行时系统", "提供基础功能")
+}
+
+System_Ext(host_env, "宿主环境", "Chrome/Node.js等")
+
+Rel(host_env, parser, "输入JS代码")
+Rel(parser, ignition, "生成AST")
+Rel(ignition, turbofan, "热点代码")
+Rel(turbofan, ignition, "优化反馈")
+Rel(ignition, gc, "内存分配")
+Rel(gc, runtime, "内存回收")
+Rel(runtime, host_env, "输出结果")
+
+legend right
+<b>核心组件</b>
+1. 解析器: 语法分析和AST生成
+2. 解释器: 字节码生成和执行
+3. 优化编译器: 热点代码优化
+4. 垃圾回收器: 内存管理
+endlegend
+
+@enduml

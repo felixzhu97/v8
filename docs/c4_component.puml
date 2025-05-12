@@ -1,0 +1,43 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title V8引擎组件图
+
+Container_Boundary(parser_boundary, "解析器") {
+    Component(scanner, "扫描器", "词法分析")
+    Component(parser, "解析器", "语法分析")
+    Component(ast, "AST生成器", "生成抽象语法树")
+    
+    Rel(scanner, parser, "提供tokens")
+    Rel(parser, ast, "生成AST")
+}
+
+Container_Boundary(ignition_boundary, "解释器") {
+    Component(bytecode, "字节码生成器", "生成字节码")
+    Component(interpreter, "解释执行器", "执行字节码")
+    Component(profiler, "性能分析器", "收集热点信息")
+    
+    Rel(bytecode, interpreter, "执行")
+    Rel(interpreter, profiler, "收集执行数据")
+}
+
+Container_Boundary(turbofan_boundary, "优化编译器") {
+    Component(optimizer, "优化器", "代码优化")
+    Component(codegen, "代码生成器", "生成机器码")
+    
+    Rel(optimizer, codegen, "优化后代码")
+}
+
+Rel(ast, bytecode, "转换为字节码")
+Rel(profiler, optimizer, "提供热点信息")
+Rel(codegen, interpreter, "替换优化代码")
+
+legend right
+<b>关键组件</b>
+1. 扫描器: 词法分析
+2. 解析器: 语法分析
+3. 字节码生成器: 生成中间代码
+4. 优化器: 热点代码优化
+endlegend
+
+@enduml
